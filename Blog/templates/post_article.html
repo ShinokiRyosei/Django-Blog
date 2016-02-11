@@ -1,0 +1,17 @@
+<body>
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+     <p>以下、Form </p>
+    <div id="content">
+       <ul>
+           {% for article in latest_article_list %}
+           {% endfor %}
+       </ul>
+    </div>
+</body>
+</html>

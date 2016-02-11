@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="forms">
+        <form action="/login" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+    </form>
+
+    </div>
+    
+    <a href="/signup">登録はこちら</a>
+    <br>
+    <a href="/">Homeに戻る</a>
+</body>
+</html>

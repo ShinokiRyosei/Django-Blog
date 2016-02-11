@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="utf-8">
+<head>
+    <link rel="stylesheet" href="style.css" />
+
+</head>
+
+<body>
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">ログインはこちらから</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+     <p>以下、Form </p>
+    <form action="/" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Submit" />
+    </form>
+    <div id="content">
+       <ul>
+           {% for post in posts %}
+           <p>{{ post.title }}</p>
+           <p>{{ post.atrticle }}</p>
+           
+           {% endfor %}
+       </ul>
+    </div>
+</body>
+</html>
