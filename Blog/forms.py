@@ -1,5 +1,6 @@
 from django.forms import ModelForm
 from Blog.models import Article, User
+from django import forms
 
 
 class ArticleForm(ModelForm):
@@ -17,6 +18,7 @@ class LoginForm(ModelForm):
         
         
 class SignupForm(ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
         model = User
         fields = ('username', 'email', 'password',)

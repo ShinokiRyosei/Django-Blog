@@ -1,20 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect, render_to_response
-from Blog.models import Article
+from Blog.models import Article, User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 from forms import ArticleForm, LoginForm, SignupForm
 from django.template import loader
 from django.utils import timezone
+from django.contrib.auth import authenticate, login
 
  
 class HomeView(TemplateView):
   template_name = 'index.html'
   
 
-
 def index(request):
     
-    latest_article_list = Article.objects.order_by('-post_date')[:5]
+    latest_article_list = Article.objects.all().order_by('-post_date')[:5]
     form = ArticleForm()
     template = loader.get_template('index.html')
     context = {
@@ -56,6 +56,12 @@ def login(request):
     context = {
         'form': form
     }
+    if request.method == 'POST':
+        user = authenticate(username=request.POST.getlist('username'), password=request.POST.getlist('password'))
+        if user != None:
+            if user.is_active():
+                login(request, user)
+                return redirect('index')
     return HttpResponse(template.render(context, request))
 
 
@@ -65,5 +71,14 @@ def signup(request):
     context = {
         'form': form
     }
+    if request.method == 'POST':
+        if form.is_valid:
+            postedSignup = User()
+            postedSignup.username = request.POST.getlist('username')
+            postedSignup.email = request.POST.getlist('email')
+            postedSignup.password = request.POST.getlist('password').set_password()
+            postedSignup.save()
+            indexView = Article.objects.get('index.html')
+            return redirect('index')
     return HttpResponse(template.render(context, request))
     # TODO: write code...
