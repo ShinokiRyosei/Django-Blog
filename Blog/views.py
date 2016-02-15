@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 from forms import ArticleForm, LoginForm, SignupForm
 from django.template import loader
 from django.utils import timezone
-from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
  
 class HomeView(TemplateView):
@@ -13,15 +13,18 @@ class HomeView(TemplateView):
   
 
 def index(request):
-    
     latest_article_list = Article.objects.all().order_by('-post_date')[:5]
     form = ArticleForm()
     template = loader.get_template('index.html')
-    context = {
-        'form': form, 'posts': latest_article_list
-    }
+    if latest_article_list is not None:
+        context = {
+            'form': form, 'posts': latest_article_list
+        }
+    else: 
+        context = {
+            'form': form
+        }
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
         if form.is_valid():
             postedArticle = Article()
             postedArticle.post_date = timezone.now()
@@ -61,7 +64,7 @@ def login(request):
         if user != None:
             if user.is_active():
                 login(request, user)
-                return redirect('index')
+                return redirect('https://django-blog-shinokin.c9users.io/')
     return HttpResponse(template.render(context, request))
 
 
@@ -78,7 +81,6 @@ def signup(request):
             postedSignup.email = request.POST.getlist('email')
             postedSignup.password = request.POST.getlist('password').set_password()
             postedSignup.save()
-            indexView = Article.objects.get('index.html')
-            return redirect('index')
+            return redirect('https://django-blog-shinokin.c9users.io/')
     return HttpResponse(template.render(context, request))
     # TODO: write code...

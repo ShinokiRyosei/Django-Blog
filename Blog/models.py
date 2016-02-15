@@ -5,16 +5,6 @@ from django.utils import timezone
 from django import forms
 
 
-class Article(models.Model):
-    article = models.TextField()
-    post_date = models.DateTimeField('date posted')
-    title = models.CharField(max_length=128)
-
-
-    def _str_(self):
-        return self.article
-
-
 class User(models.Model):
     username = models.CharField(max_length=30)
     email = models.EmailField()
@@ -22,4 +12,17 @@ class User(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class Article(models.Model):
+    article = models.TextField()
+    post_date = models.DateTimeField('date posted')
+    title = models.CharField(max_length=128)
+    user = models.OneToOneField(User, related_name="user", on_delete=models.CASCADE)
+    
+    def _str_(self):
+        return self.article
+
+
+
 # Create your models here.
