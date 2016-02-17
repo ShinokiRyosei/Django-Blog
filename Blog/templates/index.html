@@ -11,6 +11,7 @@
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/login">ログインはこちらから</a></li>
+            <li><a href="/signup">登録はこちらから</a></li>
         </ul>
         {% endblock %}
     </div>
@@ -22,11 +23,10 @@
     </form>
     <div id="content">
        <ul>
-           {% for post in posts %}
-           <p>title: {{ post.title }}</p>
-           <p>content: {{ post.article }}</p>
-           
-           {% endfor %}
+               {% for post in posts %}
+               <p>title: {{ post.title }}</p>
+               <p>content: {{ post.article }}</p>
+               {% endfor %}
        </ul>
     </div>
 </body>

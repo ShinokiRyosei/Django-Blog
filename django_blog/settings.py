@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'django_blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Blog',
+        'NAME': 'django_blog',
         'USER': 'root',
     }
 }

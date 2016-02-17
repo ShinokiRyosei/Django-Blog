@@ -16,14 +16,17 @@ def index(request):
     latest_article_list = Article.objects.all().order_by('-post_date')[:5]
     form = ArticleForm()
     template = loader.get_template('index.html')
-    if latest_article_list is not None:
-        context = {
-            'form': form, 'posts': latest_article_list
-        }
-    else: 
-        context = {
-            'form': form
-        }
+    # user = User.objects.get(pk=User.pk)
+    if request.user.is_active:
+    # if user is not None:
+        
+        return render_to_response('index.html', { 'form': form, 'posts': latest_article_list })
+    elif request.user.is_active != False and latest_article_list is not None:
+        return render_to_response('index.html', { 'posts': latest_article_list })
+        
+    else:
+        return render_to_response('index.html', {  })
+        
     if request.method == 'POST':
         if form.is_valid():
             postedArticle = Article()
@@ -33,7 +36,7 @@ def index(request):
             postedArticle.save()
         else:
             form = ArticleForm(instance=article)
-    return HttpResponse(template.render(context, request))
+    return render_to_response('index.html', { 'form': form, 'posts': latest_article_list })
     
     
 def article_post(request):
@@ -81,6 +84,6 @@ def signup(request):
             postedSignup.email = request.POST.getlist('email')
             postedSignup.password = request.POST.getlist('password').set_password()
             postedSignup.save()
-            return redirect('https://django-blog-shinokin.c9users.io/')
+            return redirect('https://django-blog-shinokin.c9users.io/login/')
     return HttpResponse(template.render(context, request))
     # TODO: write code...

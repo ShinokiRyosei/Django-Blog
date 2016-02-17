@@ -18,7 +18,7 @@ class Article(models.Model):
     article = models.TextField()
     post_date = models.DateTimeField('date posted')
     title = models.CharField(max_length=128)
-    user = models.OneToOneField(User, related_name="user", on_delete=models.CASCADE)
+    user = models.ForeignKey(User)
     
     def _str_(self):
         return self.article
