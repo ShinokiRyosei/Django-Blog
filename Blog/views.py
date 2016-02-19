@@ -43,7 +43,7 @@ def index(request):
     
 def article_post(request):
     if request.method == 'POST':
-        form = ArticleForm(request.POST)
+        form = ArticleForm(request.POST, )
         if form.is_valid():
             postedArticle = Article()
             postedArticle.post_date = timezone.now()
@@ -74,13 +74,14 @@ def article_post(request):
 
 
 def signup(request):
+    user = User()
     form = SignupForm()
     template = loader.get_template('signup.html')
     context = {
         'form': form
     }
     if request.method == 'POST':
-        form = SignupForm(request.POST)
+        form = SignupForm(request.POST, instance=user)
         if form.is_valid:
             new_user = form.save()
             # postedSignup = User

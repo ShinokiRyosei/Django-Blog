@@ -1,7 +1,7 @@
 from django.forms import ModelForm
 from Blog.models import Article, User
 from django import forms
-
+from django.contrib.auth.models import User
 
 class ArticleForm(ModelForm):
     class Meta:
