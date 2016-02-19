@@ -3,9 +3,11 @@ from Blog.models import Article, User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import TemplateView
 from forms import ArticleForm, LoginForm, SignupForm
+from django.template import RequestContext
 from django.template import loader
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 
  
 class HomeView(TemplateView):
@@ -25,7 +27,7 @@ def index(request):
         return render_to_response('index.html', { 'posts': latest_article_list })
         
     else:
-        return render_to_response('index.html', {  })
+        return render_to_response('index.html', {  }, context_instance=RequestContext(request))
         
     if request.method == 'POST':
         if form.is_valid():
@@ -36,7 +38,7 @@ def index(request):
             postedArticle.save()
         else:
             form = ArticleForm(instance=article)
-    return render_to_response('index.html', { 'form': form, 'posts': latest_article_list })
+    return render_to_response('index.html', { 'form': form, 'posts': latest_article_list }, context_instance=RequestContext(request))
     
     
 def article_post(request):
@@ -56,19 +58,19 @@ def article_post(request):
     return render_to_response('post_article.html', dict(form=form), context_instance=RequestContext(request))
 
 
-def login(request):
-    form = LoginForm()
-    template = loader.get_template('login.html')
-    context = {
-        'form': form
-    }
-    if request.method == 'POST':
-        user = authenticate(username=request.POST.getlist('username'), password=request.POST.getlist('password'))
-        if user != None:
-            if user.is_active():
-                login(request, user)
-                return redirect('https://django-blog-shinokin.c9users.io/')
-    return HttpResponse(template.render(context, request))
+# def login(request):
+#     form = LoginForm()
+#     template = loader.get_template('login.html')
+#     context = {
+#         'form': form
+#     }
+#     if request.method == 'POST':
+#         user = authenticate(username=request.POST.getlist('username'), password=request.POST.getlist('password'))
+#         if user.is_active():
+#         login(request, user)
+#         return redirect('https://django-blog-shinokin.c9users.io/')
+#                 # return render_to_response('login.html', {'form': form}, context_instance=RequestContext(request))
+#     return render_to_response('login.html', {'form': form}, context_instance=RequestContext(request))
 
 
 def signup(request):
@@ -78,12 +80,15 @@ def signup(request):
         'form': form
     }
     if request.method == 'POST':
+        form = SignupForm(request.POST)
         if form.is_valid:
-            postedSignup = User()
-            postedSignup.username = request.POST.getlist('username')
-            postedSignup.email = request.POST.getlist('email')
-            postedSignup.password = request.POST.getlist('password').set_password()
-            postedSignup.save()
-            return redirect('https://django-blog-shinokin.c9users.io/login/')
-    return HttpResponse(template.render(context, request))
+            new_user = form.save()
+            # postedSignup = User
+            # postedSignup.username = request.POST.getlist('username')
+            # postedSignup.email = request.POST.getlist('email')
+            # postedSignup.password = request.POST.getlist('password')
+            # postedSignup.save()
+            return redirect('https://django-blog-shinokin.c9users.io/')
+            # return render_to_response('login.html', {'form': form}, context_instance=RequestContext(request))
+    return render_to_response('signup.html', {'form': form}, context_instance=RequestContext(request))
     # TODO: write code...

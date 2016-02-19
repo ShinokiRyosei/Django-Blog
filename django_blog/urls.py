@@ -20,11 +20,12 @@ from django.views.generic import TemplateView
 # from Blog.views import HomeView, LoginView, SignupView
 from Blog.views import HomeView
 from Blog import views
+import django.contrib.auth.views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', views.index, name='index'),
     url(r'^article_post/', views.article_post, name='post_article'),
-    url(r'^login/', views.login, name='login.html'),
+    url(r'^login/', django.contrib.auth.views.login, {'template_name': 'login.html'}),
     url(r'^signup/', views.signup, name='signup.html'),
 ]
